@@ -29,10 +29,4 @@ public class User {
 
     private String phone;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Article> articles;
-
-    @OneToMany(mappedBy = "user")
-    private List<Feedback> feedbacks;
 }

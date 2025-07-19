@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class Article extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,6 @@ public class Article {
 
     private String content;
 
-    private String author;
-
     private String image;
 
     @Enumerated(EnumType.STRING)
@@ -36,8 +34,4 @@ public class Article {
 
     @Enumerated(EnumType.STRING)
     private Category category;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

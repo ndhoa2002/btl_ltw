@@ -1,15 +1,15 @@
 package com.example.web_project.service;
 
-import com.example.web_project.ArticleDTO;
+import com.example.web_project.common.Type;
+import com.example.web_project.dto.ArticleDTO;
 import com.example.web_project.entity.Article;
 import com.example.web_project.entity.User;
+import com.example.web_project.exception.ResourceNotFoundException;
 import com.example.web_project.repository.ArticleRepository;
 import com.example.web_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -21,9 +21,7 @@ public class ArticleService {
     private final ModelMapper modelMapper;
 
     public Article createArticle(ArticleDTO articleDTO) {
-        User user = userRepository.findById(articleDTO.getUserID()).orElse(null);
         Article article = modelMapper.map(articleDTO, Article.class);
-        article.setUser(user);
         return articleRepository.save(article);
     }
 
@@ -31,19 +29,20 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public Article getArticleById(long id) {
+    public Article getArticleById(Long id) {
         return articleRepository.findById(id).orElse(null);
     }
 
-    public Article updateArticle(long id, ArticleDTO articleDTO) {
-        Article currentArticle = articleRepository.findById(id).orElse(null);
+    public Article updateArticle(Long id, ArticleDTO articleDTO) {
+        Article currentArticle = articleRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Bài viết không tồn tại"));
         if (currentArticle != null) {
             currentArticle = modelMapper.map(articleDTO, Article.class);
         }
         return articleRepository.save(currentArticle);
     }
 
-    public void deleteArticle(long id) {
+    public void deleteArticle(Long id) {
+        articleRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Bài viết không tồn tại"));
         articleRepository.deleteById(id);
     }
 

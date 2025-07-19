@@ -1,9 +1,10 @@
 package com.example.web_project.controller;
 
 
-import com.example.web_project.ArticleDTO;
+import com.example.web_project.dto.ArticleDTO;
 import com.example.web_project.entity.Article;
 import com.example.web_project.service.ArticleService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,22 +22,22 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    public Article getArticleById(@PathVariable long id) {
+    public Article getArticleById(@PathVariable Long id) {
         return articleService.getArticleById(id);
     }
 
     @PostMapping
-    public Article addArticle(@RequestBody ArticleDTO articleDTO) {
+    public Article addArticle(@RequestBody @Valid ArticleDTO articleDTO) {
         return articleService.createArticle(articleDTO);
     }
 
-    @PostMapping("/{id}")
-    public Article updateArticle(@PathVariable long id, @RequestBody ArticleDTO articleDTO) {
+    @PutMapping("/{id}")
+    public Article updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
         return articleService.updateArticle(id, articleDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArticle(@PathVariable long id) {
+    public void deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
     }
 }
