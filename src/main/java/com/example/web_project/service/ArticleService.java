@@ -35,12 +35,12 @@ public class ArticleService {
         return articleRepository.findById(id).orElse(null);
     }
 
-    public Article updateArticle(long id, Article article) {
+    public Article updateArticle(long id, ArticleDTO articleDTO) {
         Article currentArticle = articleRepository.findById(id).orElse(null);
         if (currentArticle != null) {
-            currentArticle = modelMapper.map(article, Article.class);
+            currentArticle = modelMapper.map(articleDTO, Article.class);
         }
-        return currentArticle;
+        return articleRepository.save(currentArticle);
     }
 
     public void deleteArticle(long id) {
