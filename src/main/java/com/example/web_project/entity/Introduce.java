@@ -2,9 +2,15 @@ package com.example.web_project.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "introduce")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Introduce {
 
     @Id

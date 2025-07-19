@@ -3,9 +3,15 @@ package com.example.web_project.entity;
 
 import com.example.web_project.common.Field;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "feedback")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Feedback {
 
     @Id
