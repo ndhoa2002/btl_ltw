@@ -25,9 +25,8 @@ public class Article extends BaseEntity {
 
     private Date date;
 
+    @Lob
     private String content;
-
-    private String image;
 
     @Enumerated(EnumType.STRING)
     private Type type;

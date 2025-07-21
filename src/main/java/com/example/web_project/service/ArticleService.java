@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,8 +21,8 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public Article createArticle(ArticleDTO articleDTO) {
-        Article article = modelMapper.map(articleDTO, Article.class);
+    public Article createArticle(Article article) {
+        article.setDate(new Date());
         return articleRepository.save(article);
     }
 
@@ -30,7 +31,7 @@ public class ArticleService {
     }
 
     public Article getArticleById(Long id) {
-        return articleRepository.findById(id).orElse(null);
+        return articleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Article not found"));
     }
 
     public Article updateArticle(Long id, ArticleDTO articleDTO) {

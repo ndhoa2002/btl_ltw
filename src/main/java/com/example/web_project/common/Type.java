@@ -2,8 +2,8 @@ package com.example.web_project.common;
 
 public enum Type {
 
-    TYPE_1("Tin tức"),
-    TYPE_2("Trả lời câu hỏi");
+    NEWS("Tin tức"),
+    ANSWER_THE_QUESTION("Trả lời câu hỏi");
 
     private String typeName;
 
