@@ -9,8 +9,13 @@ import com.example.web_project.repository.ArticleRepository;
 import com.example.web_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +26,14 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public Article createArticle(Article article) {
-        article.setDate(new Date());
+    public Article createArticle(ArticleDTO articleDTO) {
+//        article.setDate(new Date());
+        Article article = modelMapper.map(articleDTO, Article.class);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // đây là username
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User Not Found"));
+        article.setCreatedAt(LocalDateTime.now());
+        article.setUser(user);
         return articleRepository.save(article);
     }
 
@@ -38,6 +49,11 @@ public class ArticleService {
         Article currentArticle = articleRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Bài viết không tồn tại"));
         if (currentArticle != null) {
             currentArticle = modelMapper.map(articleDTO, Article.class);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName(); // đây là username
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User Not Found"));
+            currentArticle.setUpdatedAt(LocalDateTime.now());
+            currentArticle.setUser(user);
         }
         return articleRepository.save(currentArticle);
     }

@@ -1,14 +1,20 @@
 package com.example.web_project.controller;
 
 
+import com.example.web_project.common.Category;
 import com.example.web_project.dto.ArticleDTO;
 import com.example.web_project.entity.Article;
+import com.example.web_project.entity.User;
+import com.example.web_project.repository.ArticleRepository;
+import com.example.web_project.repository.UserRepository;
 import com.example.web_project.service.ArticleService;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,35 +22,56 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("api/articles")
+@RequestMapping("/writer/articles")
 @RequiredArgsConstructor
 public class ArticleController {
     private final ServletContext servletContext;
     private final ArticleService articleService;
+    private final UserRepository userRepository;
+    private final ArticleRepository articleRepository;
 
     @GetMapping
     public List<Article> getArticles() {
         return articleService.getAllArticles();
     }
 
+    @GetMapping("/by-category")
+    public List<Article> getArticlesByCategory(@RequestParam Category category) {
+        List<Article> articles = articleRepository.findByCategory(category);
+        return articles;
+    }
+
+    @GetMapping("/categories")
+    public List<Map<String, String>> getCategories() {
+        List<Map<String, String>> categories = Arrays.stream(Category.values())
+                .map(cat -> {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("value", cat.name());
+                    map.put("label", cat.getCategoryName());
+                    return map;
+                })
+                .collect(Collectors.toList());
+        return categories;
+    }
+
     @GetMapping("/{id}")
     public Article getArticleById(@PathVariable Long id) {
-        return articleService.getArticleById(id);
+        Article article = articleService.getArticleById(id);
+        return article;
     }
 
     @PostMapping
-    public Article addArticle(@RequestBody @Valid Article article) {
-        return articleService.createArticle(article);
+    public Article addArticle(@RequestBody @Valid ArticleDTO articleDTO) {
+        return articleService.createArticle(articleDTO);
     }
 
     @PutMapping("/{id}")
-    public Article updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
+    public Article updateArticle(@PathVariable Long id, @RequestBody @Valid ArticleDTO articleDTO) {
         return articleService.updateArticle(id, articleDTO);
     }
 
@@ -87,7 +114,7 @@ public class ArticleController {
 //        return Map.of("url", "http://localhost:8080/images/" + fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of("url", "http://localhost:8080/images/" + fileName)).getBody();
+                .body(Map.of("location", "http://localhost:8080/images/" + fileName)).getBody();
 
     }
 }
