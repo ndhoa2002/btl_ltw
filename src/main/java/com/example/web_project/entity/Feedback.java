@@ -22,6 +22,8 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     private String fullName;
 
     private String email;
@@ -33,10 +35,12 @@ public class Feedback {
     @Enumerated(EnumType.STRING)
     private Field field;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
     private Boolean isAnswered;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String answer;
 
     private LocalDateTime questionTime;

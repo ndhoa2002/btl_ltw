@@ -4,6 +4,7 @@ import com.example.web_project.common.Category;
 import com.example.web_project.common.Field;
 import com.example.web_project.dto.AnswerDTO;
 import com.example.web_project.dto.QuestionDTO;
+import com.example.web_project.entity.Article;
 import com.example.web_project.entity.Feedback;
 import com.example.web_project.repository.FeedbackRepository;
 import com.example.web_project.service.FeedbackService;
@@ -29,6 +30,12 @@ public class FeedbackController {
     @GetMapping
     public List<Feedback> getAllFeedback() {
         return feedbackRepository.findAll();
+    }
+
+    @GetMapping("/by-field")
+    public List<Feedback> getFeedbackByField(@RequestParam Field field) {
+        List<Feedback> feedbacks = feedbackRepository.findByField(field);
+        return feedbacks;
     }
 
     @PostMapping("/create")

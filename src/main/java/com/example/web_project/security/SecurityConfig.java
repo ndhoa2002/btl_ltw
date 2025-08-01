@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/writer/**").hasAnyRole("WRITER")
                         .requestMatchers("/feedbacks/answer/**").hasAnyRole("WRITER")
+                        .requestMatchers("/feedbacks").hasAnyRole("WRITER")
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

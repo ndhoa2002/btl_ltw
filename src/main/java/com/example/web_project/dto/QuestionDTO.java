@@ -10,6 +10,9 @@ public class QuestionDTO {
 
     private Long id;
 
+    @NotBlank(message = "tiêu đề không được để trống")
+    private String title;
+
     @NotBlank(message = "tên không được để trống")
     private String fullName;
 
